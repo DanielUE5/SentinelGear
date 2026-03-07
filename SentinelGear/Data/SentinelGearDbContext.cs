@@ -1,0 +1,59 @@
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using SentinelGear.Models;
+
+namespace SentinelGear.Data
+{
+    public class SentinelGearDbContext : IdentityDbContext
+    {
+        public SentinelGearDbContext(DbContextOptions<SentinelGearDbContext> options)
+            : base(options)
+        {
+
+        }
+
+        public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
+        public virtual DbSet<CartItem> CartItems { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure unique index on CartItem for UserId and ProductId to prevent duplicate entries
+            modelBuilder.Entity<CartItem>()
+               .HasIndex(ci => new { ci.UserId, ci.ProductId })
+               .IsUnique();
+
+            // Configure relationships and cascade delete behaviors
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Product)
+                .WithMany(p => p.CartItems)
+                .HasForeignKey(ci => ci.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Order)
+                .WithMany(o => o.OrderItems)
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Product)
+                .WithMany(p => p.OrderItems)
+                .HasForeignKey(oi => oi.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Apply configurations from the assembly containing the DbContext
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(SentinelGearDbContext).Assembly);
+        }
+    }
+}
