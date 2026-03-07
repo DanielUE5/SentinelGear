@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SentinelGear.Models;
+using SentinelGear.ViewModels;
 using System.Diagnostics;
 
 namespace SentinelGear.Controllers

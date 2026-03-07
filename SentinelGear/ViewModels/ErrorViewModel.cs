@@ -1,4 +1,4 @@
-namespace SentinelGear.Models
+namespace SentinelGear.ViewModels
 {
     public class ErrorViewModel
     {
