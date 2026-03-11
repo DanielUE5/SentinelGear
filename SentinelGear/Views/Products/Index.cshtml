@@ -1,0 +1,38 @@
+﻿@model IEnumerable<SentinelGear.Models.Product>
+
+@{
+    ViewData["Title"] = "Продукти";
+}
+
+<h1 class="section-title">Продукти</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        Все още няма добавени продукти.
+    </div>
+}
+else
+{
+    <div class="product-grid">
+        @foreach (Product product in Model)
+        {
+            <div class="product-card">
+                <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? "https://via.placeholder.com/600x400?text=SentinelGear" : product.ImageUrl)" alt="@product.Name" />
+
+                <div class="product-info">
+                    <div class="product-title">@product.Name</div>
+                    <div class="product-description">@product.Description</div>
+                    <div class="product-price">@product.Price.ToString("F2") лв.</div>
+                    <div class="product-stock">
+                        Наличност: @product.StockQuantity
+                    </div>
+
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-tactical w-100">
+                        Виж детайли
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
