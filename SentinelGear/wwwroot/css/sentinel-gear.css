@@ -1,0 +1,561 @@
+:root {
+    --tactical-black: #0f172a;
+    --tactical-dark: #111827;
+    --tactical-gray: #1f2937;
+    --tactical-light-gray: #374151;
+    --military-green: #4ade80;
+    --military-green-dark: #22c55e;
+    --accent-orange: #f59e0b;
+    --text-primary: #e5e7eb;
+    --text-secondary: #9ca3af;
+    --border-color: #374151;
+    --danger-red: #dc2626;
+    --danger-red-dark: #b91c1c;
+}
+
+html {
+    font-size: 14px;
+    scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    background-color: var(--tactical-dark);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 0;
+}
+
+a {
+    color: var(--military-green);
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+}
+
+    a:hover {
+        color: var(--military-green-dark);
+        text-decoration: none;
+    }
+
+.navbar {
+    background-color: var(--tactical-black) !important;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+    color: var(--military-green) !important;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+    .navbar-brand:hover {
+        color: var(--military-green-dark) !important;
+    }
+
+.navbar-nav .nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    margin-left: 8px;
+    transition: color 0.2s ease-in-out;
+}
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link:focus {
+        color: var(--military-green) !important;
+    }
+
+.navbar-toggler {
+    border-color: var(--border-color);
+    background-color: var(--tactical-gray);
+}
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+.container,
+.container-fluid {
+    position: relative;
+    z-index: 1;
+}
+
+main {
+    min-height: calc(100vh - 140px);
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(17, 24, 39, 0.9)), url('/images/hero-tactical.jpg') center/cover no-repeat;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 80px 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    border-left: 4px solid var(--military-green);
+    padding-left: 12px;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn:focus {
+        box-shadow: none;
+    }
+
+.btn-tactical {
+    background-color: var(--military-green);
+    border: none;
+    color: #000;
+    padding: 10px 18px;
+}
+
+    .btn-tactical:hover {
+        background-color: var(--military-green-dark);
+        color: #000;
+        transform: translateY(-1px);
+    }
+
+.btn-outline-tactical {
+    background-color: transparent;
+    border: 1px solid var(--military-green);
+    color: var(--military-green);
+    padding: 10px 18px;
+}
+
+    .btn-outline-tactical:hover {
+        background-color: var(--military-green);
+        color: #000;
+    }
+
+.btn-danger-tactical {
+    background-color: var(--danger-red);
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+}
+
+    .btn-danger-tactical:hover {
+        background-color: var(--danger-red-dark);
+        color: #fff;
+    }
+
+.card,
+.product-card,
+.category-card,
+.info-card {
+    background-color: var(--tactical-gray);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    color: var(--text-primary);
+    overflow: hidden;
+    transition: all 0.25s ease-in-out;
+}
+
+    .product-card:hover,
+    .category-card:hover,
+    .info-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--military-green);
+        box-shadow: 0 0 14px rgba(74, 222, 128, 0.2);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+.product-info {
+    padding: 18px;
+}
+
+.product-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.product-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+    min-height: 48px;
+}
+
+.product-price {
+    color: var(--military-green);
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.product-stock {
+    color: var(--accent-orange);
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.category-card {
+    padding: 24px;
+    text-align: center;
+}
+
+.category-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.category-text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.form-control,
+.form-select,
+textarea {
+    background-color: var(--tactical-gray);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+}
+
+    .form-control:focus,
+    .form-select:focus,
+    textarea:focus {
+        background-color: var(--tactical-gray);
+        color: var(--text-primary);
+        border-color: var(--military-green);
+        box-shadow: 0 0 0 0.15rem rgba(74, 222, 128, 0.15);
+    }
+
+    .form-control::placeholder,
+    textarea::placeholder {
+        color: var(--text-secondary);
+    }
+
+.form-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-check-input {
+    background-color: var(--tactical-gray);
+    border: 1px solid var(--border-color);
+}
+
+    .form-check-input:checked {
+        background-color: var(--military-green);
+        border-color: var(--military-green);
+    }
+
+.table {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+        border-color: var(--border-color);
+    }
+
+.table-dark {
+    --bs-table-bg: var(--tactical-black);
+    --bs-table-striped-bg: var(--tactical-gray);
+    --bs-table-hover-bg: var(--tactical-light-gray);
+    --bs-table-border-color: var(--border-color);
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.alert-success {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+}
+
+.alert-danger {
+    background-color: rgba(220, 38, 38, 0.15);
+    color: #fca5a5;
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #fcd34d;
+}
+
+.badge.bg-tactical {
+    background-color: var(--military-green) !important;
+    color: #000;
+}
+
+.badge.bg-warning-tactical {
+    background-color: var(--accent-orange) !important;
+    color: #000;
+}
+
+.pagination .page-link {
+    background-color: var(--tactical-gray);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+    .pagination .page-link:hover {
+        background-color: var(--tactical-light-gray);
+        color: var(--military-green);
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: var(--military-green);
+    border-color: var(--military-green);
+    color: #000;
+}
+
+.footer {
+    background-color: var(--tactical-black);
+    border-top: 1px solid var(--border-color);
+    padding: 20px 0;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 40px;
+}
+
+    .footer a {
+        color: var(--military-green);
+    }
+
+        .footer a:hover {
+            color: var(--military-green-dark);
+        }
+
+.glow-hover:hover {
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.35);
+}
+
+.border-tactical {
+    border: 1px solid var(--border-color);
+}
+
+.bg-tactical-dark {
+    background-color: var(--tactical-dark) !important;
+}
+
+.bg-tactical-gray {
+    background-color: var(--tactical-gray) !important;
+}
+
+.text-tactical {
+    color: var(--text-primary) !important;
+}
+
+.text-muted-tactical {
+    color: var(--text-secondary) !important;
+}
+
+.price-highlight {
+    color: var(--military-green);
+    font-weight: 800;
+}
+
+.stock-low {
+    color: #fca5a5;
+}
+
+.stock-available {
+    color: #86efac;
+}
+
+.icon-box {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background-color: var(--tactical-light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--military-green);
+    font-size: 1.4rem;
+    margin-bottom: 14px;
+}
+
+.auth-card,
+.checkout-card,
+.cart-summary,
+.filter-box {
+    background-color: var(--tactical-gray);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 24px;
+    color: var(--text-primary);
+}
+
+.filter-box {
+    margin-bottom: 24px;
+}
+
+.cart-item {
+    background-color: var(--tactical-gray);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+    .cart-item img {
+        width: 100%;
+        max-width: 120px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+.order-status {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-block;
+}
+
+    .order-status.pending {
+        background-color: rgba(245, 158, 11, 0.15);
+        color: #fcd34d;
+    }
+
+    .order-status.processing {
+        background-color: rgba(59, 130, 246, 0.15);
+        color: #93c5fd;
+    }
+
+    .order-status.completed {
+        background-color: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+    }
+
+    .order-status.cancelled {
+        background-color: rgba(220, 38, 38, 0.15);
+        color: #fca5a5;
+    }
+
+hr {
+    border-color: var(--border-color);
+    opacity: 1;
+}
+
+.dropdown-menu {
+    background-color: var(--tactical-gray);
+    border: 1px solid var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-primary);
+}
+
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background-color: var(--tactical-light-gray);
+        color: var(--military-green);
+    }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-text-fill-color: var(--text-primary);
+    -webkit-box-shadow: 0 0 0px 1000px var(--tactical-gray) inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+@media (max-width: 991.98px) {
+    .hero-section {
+        padding: 60px 24px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .navbar-nav .nav-link {
+        margin-left: 0;
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-section {
+        padding: 40px 20px;
+    }
+
+    .hero-title {
+        font-size: 1.6rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+    }
+
+    .product-card img {
+        height: 200px;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+}
