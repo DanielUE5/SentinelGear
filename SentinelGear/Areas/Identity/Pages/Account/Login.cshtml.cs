@@ -108,7 +108,7 @@ namespace SentinelGear.Areas.Identity.Pages.Account
                 }
                 else if (result.IsLockedOut)
                 {
-                    _logger.LogWarning($"User account {Input.Email} locked out.");
+                    _logger.LogWarning("User account {Email} locked out.", Input?.Email);
                     return RedirectToPage("./Lockout");
                 }
                 else

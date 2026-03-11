@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SentinelGear.Models.Category>
+
+@{
+    ViewData["Title"] = "Категории";
+}
+
+<h1 class="section-title">Категории</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        Все още няма добавени категории.
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (Category category in Model)
+        {
+            <div class="col-md-4">
+                <div class="category-card h-100">
+                    <div class="category-title">@category.Name</div>
+                    <p class="category-text">
+                        Брой продукти: @category.Products.Count
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+}

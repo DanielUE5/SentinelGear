@@ -1,31 +1,45 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SentinelGear.Data;
 using SentinelGear.Models;
 using SentinelGear.ViewModels;
 using System.Diagnostics;
 
 namespace SentinelGear.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        // The HomeController does not currently interact with the database,
+        // but we inject the SentinelGearDbContext here for potential future use, such as displaying featured products or categories on the home page.
+        private readonly SentinelGearDbContext dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(SentinelGearDbContext dbContext)
         {
-            _logger = logger;
+            this.dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> About()
+        {
+            return View(); 
+        }
+
+        public async Task<IActionResult> Contacts() 
         {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

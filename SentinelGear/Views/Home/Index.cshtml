@@ -1,8 +1,79 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Начало";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero-section">
+    <h1 class="hero-title">Tactical Gear for Every Mission</h1>
+    <p class="hero-subtitle">
+        Открий надеждна военна и тактическа екипировка – жилетки, каски, раници,
+        защитни аксесоари и оборудване за всяка ситуация.
+    </p>
+
+    <div class="d-flex flex-wrap gap-3">
+        <a asp-controller="Products" asp-action="Index" class="btn btn-tactical">Разгледай продуктите</a>
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-outline-tactical">Виж категориите</a>
+    </div>
+</section>
+
+<section class="mb-5">
+    <h2 class="section-title">Защо SentinelGear?</h2>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="info-card p-4 h-100">
+                <div class="icon-box">🛡</div>
+                <h4>Надеждност</h4>
+                <p class="text-muted-tactical mb-0">
+                    Подбрана екипировка с фокус върху издръжливост, защита и практичност.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="info-card p-4 h-100">
+                <div class="icon-box">🎒</div>
+                <h4>Практичност</h4>
+                <p class="text-muted-tactical mb-0">
+                    Продукти за полеви условия, airsoft, outdoor дейности и тактически приложения.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="info-card p-4 h-100">
+                <div class="icon-box">⚙</div>
+                <h4>Модерен каталог</h4>
+                <p class="text-muted-tactical mb-0">
+                    Лесно разглеждане по категории, детайлен изглед и удобна основа за бъдеща количка.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">Популярни секции</h2>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="category-card h-100">
+                <div class="category-title">Защитна екипировка</div>
+                <p class="category-text">Каски, жилетки, ръкавици и защитни аксесоари.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="category-card h-100">
+                <div class="category-title">Тактически раници</div>
+                <p class="category-text">Здрави решения за транспорт на екипировка и принадлежности.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="category-card h-100">
+                <div class="category-title">Field Accessories</div>
+                <p class="category-text">Подсумници, колани, фенери и помощно оборудване.</p>
+            </div>
+        </div>
+    </div>
+</section>
