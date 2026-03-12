@@ -21,6 +21,7 @@ namespace SentinelGear.Controllers
                 .Where(p => !p.IsDeleted)
                 .Include(p => p.Category)
                 .OrderBy(p => p.Name)
+                .ThenBy(p => p.Category)
                 .ToListAsync();
 
             return View(products);
