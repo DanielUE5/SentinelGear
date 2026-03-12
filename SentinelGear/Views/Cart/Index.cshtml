@@ -1,0 +1,106 @@
+﻿@using SentinelGear.Helpers
+@model IEnumerable<SentinelGear.ViewModels.CartItemViewModel>
+
+@{
+    ViewData["Title"] = "Количка";
+    decimal totalBgn = Model.Sum(item => item.TotalPrice);
+    decimal totalEur = CurrencyConverter.ConvertBgnToEur(totalBgn);
+}
+
+<h1 class="section-title">Количка</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        Количката е празна.
+    </div>
+
+    <a asp-controller="Products" asp-action="Index" class="btn btn-tactical">
+        Към продуктите
+    </a>
+}
+else
+{
+    <div class="row g-4">
+        <div class="col-lg-8">
+            @foreach (var item in Model)
+            {
+                <div class="cart-item">
+                    <div class="row align-items-center g-3">
+                        <div class="col-md-3">
+                            <img src="@(string.IsNullOrWhiteSpace(item.ImageUrl) ? "/images/products/placeholder.jpg" : item.ImageUrl)"
+                                 alt="@item.ProductName"
+                                 class="img-fluid rounded"
+                                 onerror="this.src='/images/products/placeholder.jpg'" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <h5 class="mb-2">@item.ProductName</h5>
+                            <div class="text-muted-tactical">
+                                €@CurrencyConverter.ConvertBgnToEur(item.UnitPrice)
+                                <span class="small">(@item.UnitPrice.ToString("F2") лв.)</span>
+                            </div>
+                            <div class="small text-muted-tactical">
+                                Наличност: @item.StockQuantity
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="d-flex gap-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="number"
+                                       name="quantity"
+                                       value="@item.Quantity"
+                                       min="1"
+                                       max="@item.StockQuantity"
+                                       class="form-control" />
+                                <button type="submit" class="btn btn-outline-tactical">
+                                    Обнови
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="col-md-2 text-md-end">
+                            <div class="product-price mb-2">
+                                €@CurrencyConverter.ConvertBgnToEur(item.TotalPrice)
+                                <span class="text-muted small d-block">
+                                    (@item.TotalPrice.ToString("F2") лв.)
+                                </span>
+                            </div>
+
+                            <form asp-controller="Cart" asp-action="Remove" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-danger-tactical">
+                                    Премахни
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <div class="cart-summary">
+                <h4 class="mb-3">Обобщение</h4>
+
+                <p class="mb-2">
+                    <strong>Обща сума:</strong>
+                </p>
+
+                <div class="product-price mb-3">
+                    €@totalEur
+                    <span class="text-muted small d-block">
+                        (@totalBgn.ToString("F2") лв.)
+                    </span>
+                </div>
+
+                <a href="#" class="btn btn-tactical w-100 disabled">
+                    Продължи към поръчка
+                </a>
+            </div>
+        </div>
+    </div>
+}
