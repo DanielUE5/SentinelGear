@@ -29,10 +29,13 @@
                 </span>
             </div>
 
-            <div class="d-flex gap-3 mt-4">
-                <a asp-controller="Products" asp-action="Index" class="btn btn-outline-tactical">Назад</a>
-                <a href="#" class="btn btn-tactical disabled">Добави в количка</a>
-            </div>
+            <form asp-controller="Cart" asp-action="Add" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="productId" value="@Model.Id" />
+                <button type="submit" class="btn btn-tactical">
+                    <i class="bi bi-cart3"></i> Добави в количка
+                </button>
+            </form>
         </div>
     </div>
 </div>

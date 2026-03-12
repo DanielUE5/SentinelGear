@@ -38,7 +38,7 @@
 
         <div class="col-md-3 d-grid">
             <button type="submit" class="btn btn-tactical">
-                Филтрирай
+                <i class="bi bi-search"></i> Търси
             </button>
         </div>
     </form>
@@ -75,12 +75,25 @@ else
                         Наличност: @product.StockQuantity
                     </div>
 
-                    <a asp-controller="Products"
-                       asp-action="Details"
-                       asp-route-id="@product.Id"
-                       class="btn btn-tactical w-100">
-                        Виж детайли
-                    </a>
+                    <div class="d-grid gap-2">
+
+                        <a asp-controller="Products"
+                           asp-action="Details"
+                           asp-route-id="@product.Id"
+                           class="btn btn-tactical">
+                            Виж детайли
+                        </a>
+
+                        <form asp-controller="Cart" asp-action="Add" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productId" value="@product.Id" />
+
+                            <button type="submit" class="btn btn-tactical w-100">
+                                <i class="bi bi-cart3"></i> Добави в количка
+                            </button>
+                        </form>
+
+                    </div>
                 </div>
             </div>
         }

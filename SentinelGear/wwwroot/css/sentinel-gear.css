@@ -456,6 +456,31 @@ textarea {
         object-fit: cover;
     }
 
+    .cart-item .btn {
+        white-space: nowrap;
+    }
+
+.cart-cta-btn {
+    background: var(--military-green);
+    color: black;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .cart-cta-btn:hover {
+        background: var(--military-green-dark);
+        color: black;
+        transform: translateY(-1px);
+        box-shadow: 0 0 10px rgba(74,222,128,0.35);
+    }
+
 .order-status {
     padding: 6px 12px;
     border-radius: 999px;
