@@ -3,14 +3,51 @@
 
 @{
     ViewData["Title"] = "Продукти";
+    IEnumerable<Category> categories = ViewBag.Categories as IEnumerable<SentinelGear.Models.Category>
+                     ?? Enumerable.Empty<SentinelGear.Models.Category>();
 }
 
 <h1 class="section-title">Продукти</h1>
 
+<div class="filter-box mb-4">
+    <form method="get" class="row g-3">
+        <div class="col-md-5">
+            <input name="searchTerm"
+                   value="@ViewBag.SearchTerm"
+                   class="form-control"
+                   placeholder="Търси продукт..." />
+        </div>
+
+        <div class="col-md-4">
+            <select name="categoryId" class="form-select">
+                <option value="">Всички категории</option>
+
+                @foreach (Category category in categories)
+                {
+                    if ((int?)ViewBag.SelectedCategory == category.Id)
+                    {
+                        <option value="@category.Id" selected>@category.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3 d-grid">
+            <button type="submit" class="btn btn-tactical">
+                Филтрирай
+            </button>
+        </div>
+    </form>
+</div>
+
 @if (!Model.Any())
 {
     <div class="alert alert-warning">
-        Все още няма добавени продукти.
+        Няма намерени продукти.
     </div>
 }
 else
@@ -19,18 +56,29 @@ else
         @foreach (Product product in Model)
         {
             <div class="product-card">
-                <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? "https://via.placeholder.com/600x400?text=SentinelGear" : product.ImageUrl)" alt="@product.Name" />
+                <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? "/images/image_not_found.jpg" : product.ImageUrl)"
+                     alt="@product.Name"
+                     onerror="this.src='/images/products/placeholder.jpg'" />
 
                 <div class="product-info">
                     <div class="product-title">@product.Name</div>
                     <div class="product-description">@product.Description</div>
-                    <div class="product-price">€@CurrencyConverter.ConvertBgnToEur(product.Price)</div>
-                    <div class="text-muted">(@product.Price.ToString("F2") лв.)</div>
+
+                    <div class="product-price">
+                        €@CurrencyConverter.ConvertBgnToEur(product.Price)
+                        <span class="text-muted small">
+                            (@product.Price.ToString("F2") лв.)
+                        </span>
+                    </div>
+
                     <div class="product-stock">
                         Наличност: @product.StockQuantity
                     </div>
 
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-tactical w-100">
+                    <a asp-controller="Products"
+                       asp-action="Details"
+                       asp-route-id="@product.Id"
+                       class="btn btn-tactical w-100">
                         Виж детайли
                     </a>
                 </div>
