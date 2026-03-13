@@ -1,20 +1,37 @@
-﻿<!DOCTYPE html>
+﻿@using SentinelGear.Extensions
+@using SentinelGear.ViewModels
+
+@{
+    IEnumerable<CartItemViewModel> cartItems = Context.Session.GetObject<List<CartItemViewModel>>("ShoppingCart")
+                    ?? new List<CartItemViewModel>();
+
+    int cartItemsCount = cartItems.Sum(item => item.Quantity);
+}
+
+<!DOCTYPE html>
 <html lang="bg">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SentinelGear</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/sentinel-gear.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Sentinel-Gear</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">SentinelGear</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNav"
+                        aria-controls="mainNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -35,36 +52,46 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Contacts">Контакти</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="cart-cta-btn"
-                               asp-controller="Cart"
-                               asp-action="Index">
-                                <i class="bi bi-cart3"></i> Количка
-                            </a>
-                        </li>
                     </ul>
 
-                    <partial name="_LoginPartial" />
+                    <div class="d-flex align-items-center gap-3">
+                        <a class="cart-cta-btn" asp-controller="Cart" asp-action="Index">
+                            <i class="bi bi-cart3"></i>
+                            <span>Количка</span>
+                            <span class="cart-badge @(cartItemsCount == 0 ? "d-none" : "")">
+                                @cartItemsCount
+                            </span>
+                        </a>
+
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
     <div class="container">
-        <main role="main">
+        <main role="main" class="py-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            &copy; 2026 - SentinelGear | Tactical Gear Store
+    <footer class="footer mt-auto py-3">
+        <div class="container text-center">
+            &copy; 2026 SentinelGear | Tactical Gear Store
         </div>
     </footer>
+
+    <div id="cart-toast" class="cart-toast">
+        <i class="bi bi-check-circle-fill"></i>
+        <span id="cart-toast-message">Продуктът беше добавен в количката.</span>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/cart.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

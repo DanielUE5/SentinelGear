@@ -20,6 +20,7 @@ namespace SentinelGear.Controllers
         public IActionResult Index()
         {
             List<CartItemViewModel> cartItems = GetCartItems();
+
             return View(cartItems);
         }
 
@@ -39,7 +40,7 @@ namespace SentinelGear.Controllers
             List<CartItemViewModel> cartItems = GetCartItems();
 
             CartItemViewModel? existingCartItem = cartItems
-                .FirstOrDefault(item => item.ProductId == productId);
+                .FirstOrDefault(cartItem => cartItem.ProductId == productId);
 
             if (existingCartItem is not null)
             {
@@ -50,7 +51,7 @@ namespace SentinelGear.Controllers
             }
             else
             {
-                cartItems.Add(new CartItemViewModel
+                CartItemViewModel newCartItem = new()
                 {
                     ProductId = product.Id,
                     ProductName = product.Name,
@@ -58,12 +59,21 @@ namespace SentinelGear.Controllers
                     UnitPrice = product.Price,
                     Quantity = 1,
                     StockQuantity = product.StockQuantity
-                });
+                };
+
+                cartItems.Add(newCartItem);
             }
 
             SaveCartItems(cartItems);
 
-            return RedirectToAction(nameof(Index));
+            int cartItemsCount = cartItems.Sum(cartItem => cartItem.Quantity);
+
+            return Json(new
+            {
+                success = true,
+                cartCount = cartItemsCount,
+                productName = product.Name
+            });
         }
 
         [HttpPost]
@@ -73,7 +83,7 @@ namespace SentinelGear.Controllers
             List<CartItemViewModel> cartItems = GetCartItems();
 
             CartItemViewModel? cartItemToRemove = cartItems
-                .FirstOrDefault(item => item.ProductId == productId);
+                .FirstOrDefault(cartItem => cartItem.ProductId == productId);
 
             if (cartItemToRemove is not null)
             {
@@ -91,7 +101,7 @@ namespace SentinelGear.Controllers
             List<CartItemViewModel> cartItems = GetCartItems();
 
             CartItemViewModel? existingCartItem = cartItems
-                .FirstOrDefault(item => item.ProductId == productId);
+                .FirstOrDefault(cartItem => cartItem.ProductId == productId);
 
             if (existingCartItem is null)
             {
@@ -116,8 +126,10 @@ namespace SentinelGear.Controllers
 
         private List<CartItemViewModel> GetCartItems()
         {
-            return HttpContext.Session.GetObject<List<CartItemViewModel>>(CartSessionKey)
-                   ?? new List<CartItemViewModel>();
+            List<CartItemViewModel>? cartItems = HttpContext.Session
+                .GetObject<List<CartItemViewModel>>(CartSessionKey);
+
+            return cartItems ?? new List<CartItemViewModel>();
         }
 
         private void SaveCartItems(List<CartItemViewModel> cartItems)

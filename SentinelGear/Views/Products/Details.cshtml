@@ -28,14 +28,12 @@
                     (@Model.Price.ToString("F2") лв.)
                 </span>
             </div>
-
-            <form asp-controller="Cart" asp-action="Add" method="post">
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="productId" value="@Model.Id" />
-                <button type="submit" class="btn btn-tactical">
-                    <i class="bi bi-cart3"></i> Добави в количка
-                </button>
-            </form>
+            @Html.AntiForgeryToken()
+            <button class="btn btn-tactical w-100 add-to-cart-btn"
+                    data-product-id="@Model.Id"
+                    data-product-name="@Model.Name">
+                <i class="bi bi-cart3"></i> Добави в количка
+            </button>
         </div>
     </div>
 </div>

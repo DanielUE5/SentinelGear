@@ -9,6 +9,11 @@
 
 <h1 class="section-title">Продукти</h1>
 
+<div id="cart-toast" class="cart-toast">
+    <i class="bi bi-check-circle-fill"></i>
+    <span id="cart-toast-message">Продуктът е добавен в количката.</span>
+</div>
+
 <div class="filter-box mb-4">
     <form method="get" class="row g-3">
         <div class="col-md-5">
@@ -58,7 +63,8 @@ else
             <div class="product-card">
                 <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? "/images/image_not_found.jpg" : product.ImageUrl)"
                      alt="@product.Name"
-                     onerror="this.src='/images/products/placeholder.jpg'" />
+                     loading="lazy"
+                     onerror="this.src='/images/image_not_found.jpg'" />
 
                 <div class="product-info">
                     <div class="product-title">@product.Name</div>
@@ -83,19 +89,81 @@ else
                            class="btn btn-tactical">
                             Виж детайли
                         </a>
-
-                        <form asp-controller="Cart" asp-action="Add" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="productId" value="@product.Id" />
-
-                            <button type="submit" class="btn btn-tactical w-100">
-                                <i class="bi bi-cart3"></i> Добави в количка
-                            </button>
-                        </form>
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-tactical w-100 add-to-cart-btn"
+                                data-product-id="@product.Id"
+                                data-product-name="@product.Name">
+                            <i class="bi bi-cart3"></i> Добави в количка
+                        </button>
 
                     </div>
                 </div>
             </div>
         }
     </div>
+}
+
+@section Scripts {
+    <script>
+        const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+            button.addEventListener("click", async function () {
+                const productId = this.dataset.productId;
+                const productName = this.dataset.productName;
+
+                try {
+                    const response = await fetch("/Cart/Add", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                            "RequestVerificationToken": antiForgeryToken
+                        },
+                        body: `productId=${encodeURIComponent(productId)}`
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Неуспешно добавяне в количката.");
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const badge = document.querySelector(".cart-badge");
+
+                        if (badge) {
+                            badge.textContent = data.cartCount;
+                        }
+
+                        showCartToast(`${data.productName} беше добавен в количката.`);
+                    }
+                } catch (error) {
+                    showCartToast("Възникна проблем при добавяне в количката.", true);
+                }
+            });
+        });
+
+        function showCartToast(message, isError = false) {
+            const toast = document.getElementById("cart-toast");
+            const toastMessage = document.getElementById("cart-toast-message");
+
+            toastMessage.textContent = message;
+
+            toast.classList.remove("show", "error");
+
+            if (isError) {
+                toast.classList.add("error");
+            }
+
+            requestAnimationFrame(() => {
+                toast.classList.add("show");
+            });
+
+            clearTimeout(toast.hideTimeout);
+
+            toast.hideTimeout = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2500);
+        }
+    </script>
 }
