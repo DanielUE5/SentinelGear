@@ -4,6 +4,7 @@ using SentinelGear.Data;
 using SentinelGear.Extensions;
 using SentinelGear.Models;
 using SentinelGear.ViewModels;
+using SentinelGear.Models.Enums;
 
 namespace SentinelGear.Controllers
 {
@@ -135,6 +136,99 @@ namespace SentinelGear.Controllers
         private void SaveCartItems(List<CartItemViewModel> cartItems)
         {
             HttpContext.Session.SetObject(CartSessionKey, cartItems);
+        }
+
+        public IActionResult Checkout()
+        {
+            List<CartItemViewModel> cartItems = GetCartItems();
+
+            if (!cartItems.Any())
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(new CheckoutViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout(CheckoutViewModel model)
+        {
+            List<CartItemViewModel> cartItems = GetCartItems();
+
+            if (!cartItems.Any())
+            {
+                ModelState.AddModelError(string.Empty, "Количката е празна.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            Order order = new()
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Address = model.Address,
+                CreatedOn = DateTime.UtcNow,
+                Status = OrderStatus.Pending,
+                TotalAmount = cartItems.Sum(cartItem => cartItem.TotalPrice),
+                UserId = User.Identity?.IsAuthenticated == true
+                    ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                    : null
+            };
+
+            foreach (CartItemViewModel cartItem in cartItems)
+            {
+                Product? product = await dbContext.Products
+                    .FirstOrDefaultAsync(product => product.Id == cartItem.ProductId);
+
+                if (product is null)
+                {
+                    continue;
+                }
+
+                if (product.StockQuantity < cartItem.Quantity)
+                {
+                    ModelState.AddModelError(string.Empty,
+                        $"Недостатъчна наличност за продукт: {product.Name}");
+                    return View(model);
+                }
+
+                product.StockQuantity -= cartItem.Quantity;
+
+                order.OrderItems.Add(new OrderItem
+                {
+                    ProductId = product.Id,
+                    Quantity = cartItem.Quantity,
+                    UnitPrice = cartItem.UnitPrice
+                });
+            }
+
+            await dbContext.Orders.AddAsync(order);
+            await dbContext.SaveChangesAsync();
+
+            HttpContext.Session.Remove(CartSessionKey);
+
+            return RedirectToAction(nameof(Confirmation), new { id = order.Id });
+        }
+
+        public async Task<IActionResult> Confirmation(int id)
+        {
+            Order? order = await dbContext.Orders
+                .AsNoTracking()
+                .Include(order => order.OrderItems)
+                .FirstOrDefaultAsync(order => order.Id == id);
+
+            if (order is null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
         }
     }
 }

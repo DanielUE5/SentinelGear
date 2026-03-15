@@ -1,0 +1,76 @@
+@using SentinelGear.Helpers
+@model SentinelGear.Models.Order
+
+@{
+    ViewData["Title"] = "Поръчката е приета";
+}
+
+<h1 class="section-title">Поръчката е приета</h1>
+
+<div class="checkout-card">
+    <div class="alert alert-success mb-4">
+        Благодарим ви! Вашата поръчка беше създадена успешно.
+    </div>
+
+    <p><strong>Номер на поръчка:</strong> #@Model.Id</p>
+    <p><strong>Дата:</strong> @Model.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+    <p>
+        <strong>Статус:</strong>
+        <span class="order-status pending">@Model.Status</span>
+    </p>
+    <p><strong>Клиент:</strong> @Model.FirstName @Model.LastName</p>
+    <p><strong>Телефон:</strong> @Model.PhoneNumber</p>
+    <p><strong>Адрес:</strong> @Model.Address</p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Email))
+    {
+        <p><strong>Имейл:</strong> @Model.Email</p>
+    }
+
+    <hr />
+
+    <h4 class="mb-3">Поръчани артикули</h4>
+
+    <div class="table-responsive">
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th>Продукт</th>
+                    <th>Количество</th>
+                    <th>Ед. цена</th>
+                    <th>Общо</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OrderItems)
+                {
+                    <tr>
+                        <td>Продукт #@item.ProductId</td>
+                        <td>@item.Quantity</td>
+                        <td>
+                            €@CurrencyConverter.ConvertBgnToEur(item.UnitPrice)
+                            <div class="small text-muted">(@item.UnitPrice.ToString("F2") лв.)</div>
+                        </td>
+                        <td>
+                            €@CurrencyConverter.ConvertBgnToEur(item.UnitPrice * item.Quantity)
+                            <div class="small text-muted">(@((item.UnitPrice * item.Quantity).ToString("F2")) лв.)</div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="product-price mt-3">
+        €@CurrencyConverter.ConvertBgnToEur(Model.TotalAmount)
+        <span class="text-muted small d-block">
+            (@Model.TotalAmount.ToString("F2") лв.)
+        </span>
+    </div>
+
+    <div class="mt-4">
+        <a asp-controller="Products" asp-action="Index" class="btn btn-tactical">
+            Обратно към продуктите
+        </a>
+    </div>
+</div>
