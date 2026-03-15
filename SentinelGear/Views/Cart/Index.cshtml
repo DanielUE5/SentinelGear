@@ -29,9 +29,8 @@ else
                     <div class="row align-items-center g-3">
                         <div class="col-md-3">
                             <img src="@(string.IsNullOrWhiteSpace(item.ImageUrl) ? "/images/products/placeholder.jpg" : item.ImageUrl)"
-                                 alt="@item.ProductName"
-                                 class="img-fluid rounded"
-                                 onerror="this.src='/images/products/placeholder.jpg'" />
+                                alt="@item.ProductName" class="img-fluid rounded"
+                                onerror="this.src='/images/products/placeholder.jpg'" />
                         </div>
 
                         <div class="col-md-4">
@@ -49,12 +48,8 @@ else
                             <form asp-controller="Cart" asp-action="UpdateQuantity" method="post" class="d-flex gap-2">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="productId" value="@item.ProductId" />
-                                <input type="number"
-                                       name="quantity"
-                                       value="@item.Quantity"
-                                       min="1"
-                                       max="@item.StockQuantity"
-                                       class="form-control" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="@item.StockQuantity"
+                                    class="form-control" />
                                 <button type="submit" class="btn btn-outline-tactical">
                                     Обнови
                                 </button>
@@ -101,7 +96,7 @@ else
                     Продължи с пазаруването
                 </a>
 
-                <a href="#" class="btn btn-tactical w-100 disabled">
+                <a asp-controller="Cart" asp-action="Checkout" class="btn btn-tactical w-100">
                     Продължи към поръчка
                 </a>
             </div>
