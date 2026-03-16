@@ -8,5 +8,10 @@
         {
             return Math.Round(priceInBgn / BgnToEurRate, 2);
         }
+
+        public static decimal ConvertEurToBgn(decimal priceInEur)
+        {
+            return Math.Round(priceInEur * BgnToEurRate, 2);
+        }
     }
 }

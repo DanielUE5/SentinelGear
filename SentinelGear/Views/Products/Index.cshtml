@@ -1,10 +1,8 @@
 ﻿@using SentinelGear.Helpers
-@model IEnumerable<SentinelGear.Models.Product>
+@model ProductCatalogViewModel
 
 @{
     ViewData["Title"] = "Продукти";
-    IEnumerable<Category> categories = ViewBag.Categories as IEnumerable<SentinelGear.Models.Category>
-    ?? Enumerable.Empty<SentinelGear.Models.Category>();
 }
 
 <h1 class="section-title">Продукти</h1>
@@ -15,38 +13,40 @@
 </div>
 
 <div class="filter-box mb-4">
-    <form method="get" class="row g-3">
-        <div class="col-md-5">
-            <input name="searchTerm" value="@ViewBag.SearchTerm" class="form-control" placeholder="Търси продукт..." />
+    <form method="get" asp-action="Index" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <input asp-for="Filter.SearchTerm" class="form-control"
+                placeholder="Търсене по име, описание или производител" />
         </div>
 
-        <div class="col-md-4">
-            <select name="categoryId" class="form-select">
+        <div class="col-md-2">
+            <select asp-for="Filter.CategoryId" asp-items="Model.Categories" class="form-select">
                 <option value="">Всички категории</option>
-
-                @foreach (Category category in categories)
-                {
-                    if ((int?)ViewBag.SelectedCategory == category.Id)
-                    {
-                        <option value="@category.Id" selected>@category.Name</option>
-                    }
-                    else
-                    {
-                        <option value="@category.Id">@category.Name</option>
-                    }
-                }
             </select>
         </div>
 
-        <div class="col-md-3 d-grid">
-            <button type="submit" class="btn btn-tactical">
-                <i class="bi bi-search"></i> Търси
-            </button>
+        <div class="col-md-2">
+            <select asp-for="Filter.Manufacturer" asp-items="Model.Manufacturers" class="form-select">
+                <option value="">Всички производители</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <input asp-for="Filter.MinPrice" class="form-control" placeholder="Мин. цена (€)" />
+        </div>
+
+        <div class="col-md-2">
+            <input asp-for="Filter.MaxPrice" class="form-control" placeholder="Макс. цена (€)" />
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Филтрирай</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Изчисти</a>
         </div>
     </form>
 </div>
 
-@if (!Model.Any())
+@if (!Model.Products.Any())
 {
     <div class="alert alert-warning">
         Няма намерени продукти.
@@ -55,7 +55,7 @@
 else
 {
     <div class="product-grid">
-        @foreach (Product product in Model)
+        @foreach (Product product in Model.Products)
         {
             <div class="product-card">
                 <img src="@(string.IsNullOrWhiteSpace(product.ImageUrl) ? "/images/image_not_found.jpg" : product.ImageUrl)"
