@@ -21,6 +21,7 @@ namespace SentinelGear.ViewModels
 
         [Required]
         [Phone]
+        [RegularExpression(@"^(\+359|0)8[7-9]\d{2}\s?\d{3}\s?\d{3}$", ErrorMessage = "Невалиден телефонен номер")]
         [Display(Name = "Телефон")]
         public string PhoneNumber { get; set; } = null!;
 

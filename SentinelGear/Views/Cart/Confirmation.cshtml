@@ -45,7 +45,7 @@
                 @foreach (var item in Model.OrderItems)
                 {
                     <tr>
-                        <td>Продукт #@item.ProductId</td>
+                        <td>@(item.Product?.Name ?? $"Продукт #{item.ProductId}")</td>
                         <td>@item.Quantity</td>
                         <td>
                             €@CurrencyConverter.ConvertBgnToEur(item.UnitPrice)

@@ -88,7 +88,7 @@ namespace SentinelGear.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             ReturnUrl = returnUrl;
 
-            if (!_signInManager.IsSignedIn(User))
+            if (_signInManager.IsSignedIn(User))
             {
                 return LocalRedirect(returnUrl);
             }
