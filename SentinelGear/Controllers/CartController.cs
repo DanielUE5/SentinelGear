@@ -219,9 +219,10 @@ namespace SentinelGear.Controllers
         public async Task<IActionResult> Confirmation(int id)
         {
             Order? order = await dbContext.Orders
-                .AsNoTracking()
-                .Include(order => order.OrderItems)
-                .FirstOrDefaultAsync(order => order.Id == id);
+            .AsNoTracking()
+            .Include(order => order.OrderItems)
+            .ThenInclude(orderItem => orderItem.Product)
+            .FirstOrDefaultAsync(order => order.Id == id);
 
             if (order is null)
             {

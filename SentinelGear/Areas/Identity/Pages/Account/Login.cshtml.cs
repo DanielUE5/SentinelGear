@@ -15,11 +15,13 @@ namespace SentinelGear.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -81,8 +83,8 @@ namespace SentinelGear.Areas.Identity.Pages.Account
 
             returnUrl ??= Url.Content("~/");
 
-            if (_signInManager.IsSignedIn(User)) 
-            { 
+            if (_signInManager.IsSignedIn(User))
+            {
                 return LocalRedirect(returnUrl);
             }
 
@@ -101,23 +103,30 @@ namespace SentinelGear.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                SignInResult result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
-                if (result.Succeeded)
+                IdentityUser user = await _userManager.FindByEmailAsync(Input.Email);
+
+                if (user != null)
                 {
-                    return LocalRedirect(returnUrl);
+                    SignInResult result = await _signInManager.PasswordSignInAsync(
+                        user.UserName!,
+                        Input.Password,
+                        Input.RememberMe,
+                        lockoutOnFailure: true);
+
+                    if (result.Succeeded)
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    else if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account {Email} locked out.", Input?.Email);
+                        return RedirectToPage("./Lockout");
+                    }
                 }
-                else if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account {Email} locked out.", Input?.Email);
-                    return RedirectToPage("./Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }
