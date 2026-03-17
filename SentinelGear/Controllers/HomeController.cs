@@ -30,12 +30,38 @@ namespace SentinelGear.Controllers
 
         public async Task<IActionResult> About()
         {
-            return View(); 
+            return View();
         }
 
-        public async Task<IActionResult> Contacts() 
+        [HttpGet]
+        public async Task<IActionResult> Contacts()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Contacts(ContactMessage model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Моля, попълнете всички задължителни полета правилно.";
+                return View(model);
+            }
+
+            try
+            {
+                dbContext.ContactMessages.Add(model);
+                await dbContext.SaveChangesAsync();
+
+                TempData["Success"] = "Благодарим Ви! Вашето съобщение беше изпратено успешно.";
+                return RedirectToAction(nameof(Contacts));
+            }
+            catch
+            {
+                TempData["Error"] = "Възникна грешка при изпращането. Моля, опитайте отново.";
+                return View(model);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
