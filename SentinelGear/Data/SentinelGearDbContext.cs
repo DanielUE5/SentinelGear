@@ -17,6 +17,7 @@ namespace SentinelGear.Data
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<CartItem> CartItems { get; set; } = null!;
+        public virtual DbSet<ContactMessage> ContactMessages { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

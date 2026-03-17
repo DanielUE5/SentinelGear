@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SentinelGear.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using static SentinelGear.Common.EntityValidation.Order;
 
 namespace SentinelGear.Models
 {
@@ -10,19 +11,24 @@ namespace SentinelGear.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(FirstNameMaxLength)]
         public string FirstName { get; set; } = null!;
 
         [Required]
+        [MaxLength()]
         public string LastName { get; set; } = null!;
 
         [EmailAddress]
+        [MaxLength(EmailMaxLength)]
         public string? Email { get; set; }
 
         [Required]
         [Phone]
+        [RegularExpression(PhoneNumberPattern, ErrorMessage = "Невалиден телефонен номер")]
         public string PhoneNumber { get; set; } = null!;
 
         [Required]
+        [MaxLength(AddressMaxLength)]
         public string Address { get; set; } = null!;
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
