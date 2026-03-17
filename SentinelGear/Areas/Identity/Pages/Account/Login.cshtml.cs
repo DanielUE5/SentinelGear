@@ -70,7 +70,7 @@ namespace SentinelGear.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Запомни ме!")]
             public bool RememberMe { get; set; }
         }
 
@@ -119,12 +119,12 @@ namespace SentinelGear.Areas.Identity.Pages.Account
                     }
                     else if (result.IsLockedOut)
                     {
-                        _logger.LogWarning("User account {Email} locked out.", Input?.Email);
+                        _logger.LogWarning("Потребителският акаунт {Email} е заключен.", Input?.Email);
                         return RedirectToPage("./Lockout");
                     }
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError(string.Empty, "Невалиден опит за вход.");
             }
 
             return Page();

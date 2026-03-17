@@ -59,7 +59,7 @@ namespace SentinelGear.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Имейл")]
             public string Email { get; set; }
 
             /// <summary>
@@ -67,9 +67,9 @@ namespace SentinelGear.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "{0} трябва да е с дължина поне {2} и максимум {1} знака.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             /// <summary>
@@ -77,8 +77,8 @@ namespace SentinelGear.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Потвърдете паролата")]
+            [Compare("Password", ErrorMessage = "Паролата и потвърдете паролата не съвпадат.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -141,9 +141,9 @@ namespace SentinelGear.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                throw new InvalidOperationException($"Не може да се създаде екземпляр на '{nameof(IdentityUser)}'. " +
+                    $"Уверете се, че '{nameof(IdentityUser)}' не е абстрактен клас и има конструктор без параметри, или алтернативно " +
+                    $"презапишете страницата за регистрация в /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
@@ -151,7 +151,7 @@ namespace SentinelGear.Areas.Identity.Pages.Account
         {
             if (!_userManager.SupportsUserEmail)
             {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
+                throw new NotSupportedException("Стандартният потребителски интерфейс изисква потребителски магазин с поддръжка по имейл.");
             }
             return (IUserEmailStore<IdentityUser>)_userStore;
         }
