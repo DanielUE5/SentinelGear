@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static SentinelGear.Common.EntityValidation.ProductFormViewModel;
 
 namespace SentinelGear.ViewModels
 {
@@ -9,12 +9,12 @@ namespace SentinelGear.ViewModels
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Името е задължително.")]
-        [StringLength(100)]
+        [MaxLength(NameMaxLength)]
         [Display(Name = "Име")]
         public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Описанието е задължително.")]
-        [StringLength(1000)]
+        [MaxLength(DescriptionMaxLength, ErrorMessage = "Описанието не може да бъде по-дълго от 1000 символа.")]
         [Display(Name = "Описание")]
         public string Description { get; set; } = null!;
 
@@ -28,7 +28,7 @@ namespace SentinelGear.ViewModels
         [Display(Name = "Наличност")]
         public int StockQuantity { get; set; }
 
-        [StringLength(100)]
+        [MaxLength(ManufacturerMaxLength, ErrorMessage = "Производителят не може да бъде по-дълъг от 100 символа.")]
         [Display(Name = "Производител")]
         public string? Manufacturer { get; set; }
 

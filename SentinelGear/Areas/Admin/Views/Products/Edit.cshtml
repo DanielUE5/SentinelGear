@@ -1,0 +1,76 @@
+@model SentinelGear.ViewModels.ProductFormViewModel
+
+@{
+    ViewData["Title"] = "Редакция на продукт";
+}
+
+<div class="container mt-4">
+    <div class="card bg-dark text-light shadow-sm p-4">
+        <h1 class="mb-4">Редакция на продукт</h1>
+
+        <form asp-area="Admin" asp-controller="Products" asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input asp-for="Id" type="hidden" />
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label text-light"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label text-light"></label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label text-light"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="StockQuantity" class="form-label text-light"></label>
+                <input asp-for="StockQuantity" class="form-control" />
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Manufacturer" class="form-label text-light"></label>
+                <input asp-for="Manufacturer" class="form-control" />
+                <span asp-validation-for="Manufacturer" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label text-light"></label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+                    <option value="">Изберете категория</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label text-light">Текуща снимка</label>
+                <div class="mb-2">
+                    <img src="@(string.IsNullOrWhiteSpace(Model.ExistingImageUrl) ? "/images/image_not_found.jpg" : Model.ExistingImageUrl)"
+                        alt="Product Image" style="max-width: 220px; border-radius: 10px;" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImageFile" class="form-label text-light"></label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">Запази промените</button>
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn btn-secondary">Назад</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

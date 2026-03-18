@@ -15,7 +15,7 @@ namespace SentinelGear.Models
         public string FirstName { get; set; } = null!;
 
         [Required]
-        [MaxLength()]
+        [MaxLength(LastNameMaxLength)]
         public string LastName { get; set; } = null!;
 
         [EmailAddress]
