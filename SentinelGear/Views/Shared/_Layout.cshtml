@@ -6,6 +6,8 @@
     ?? new List<CartItemViewModel>();
 
     int cartItemsCount = cartItems.Sum(item => item.Quantity);
+    bool isAuthenticated = User.Identity?.IsAuthenticated == true;
+    bool isAdmin = User.IsInRole("Admin");
 }
 
 <!DOCTYPE html>
@@ -25,7 +27,12 @@
     <header>
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">SentinelGear</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SentinelGear</a>
+
+                @if (isAdmin)
+                {
+                    <span class="badge bg-danger ms-3 text-uppercase">Admin Panel</span>
+                }
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
                     aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,44 +41,95 @@
 
                 <div class="collapse navbar-collapse" id="mainNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Начало</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Products" asp-action="Index">Продукти</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Categories" asp-action="Index">Категории</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="About">За нас</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Contacts">Контакти</a>
-                        </li>
+                        @if (!isAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Начало</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Продукти</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index">Категории</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">За нас</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contacts">Контакти</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Products" asp-action="Index">
+                                    Управление на продукти
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Index">
+                                    Управление на категории
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">
+                                    Управление на поръчки
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contacts">Контакти</a>
+                            </li>
+                        }
                     </ul>
 
-                    <div class="d-flex align-items-center gap-3">
-
-                        <a class="cart-cta-btn" asp-controller="Cart" asp-action="Index">
-                            <i class="bi bi-cart3"></i>
-                            <span>Количка</span>
-                            <span class="cart-badge @(cartItemsCount == 0 ? "d-none" : "")">
-                                @cartItemsCount
-                            </span>
-                        </a>
-
-                        @* Show the role when authenticated (for now)*@
-                        @if (User.Identity?.IsAuthenticated ?? false)
+                    <div class="d-flex align-items-center gap-2">
+                        @if (!isAdmin)
                         {
-                            <span class="text-light small">
-                                (@User.Identity!.Name |
-                                @(User.IsInRole("Admin") ? "Admin" : "User"))
-                            </span>
+                            <a class="cart-cta-btn" asp-area="" asp-controller="Cart" asp-action="Index">
+                                <i class="bi bi-cart3"></i>
+                                <span>Количка</span>
+                                <span class="cart-badge @(cartItemsCount == 0 ? "d-none" : "")">
+                                    @cartItemsCount
+                                </span>
+                            </a>
                         }
 
-                        <partial name="_LoginPartial" />
+                        @if (isAuthenticated)
+                        {
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle text-decoration-none" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle me-1"></i>
+                                    @(isAdmin ? "Админ профил" : "Моят профил")
+                                </a>
 
+                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                                    @if (!isAdmin)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Orders" asp-action="MyOrders">
+                                                <i class="bi bi-bag-check me-2"></i> Моите поръчки
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider" />
+                                        </li>
+                                    }
+
+                                    <li>
+                                        <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-box-arrow-right me-2"></i> Изход
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <partial name="_LoginPartial" />
+                        }
                     </div>
                 </div>
             </div>

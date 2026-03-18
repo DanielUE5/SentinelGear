@@ -1,4 +1,5 @@
 ﻿@using SentinelGear.Helpers
+@using SentinelGear.ViewModels
 @model IEnumerable<SentinelGear.ViewModels.CartItemViewModel>
 
 @{
@@ -23,7 +24,7 @@ else
 {
     <div class="row g-4">
         <div class="col-lg-8">
-            @foreach (var item in Model)
+            @foreach (CartItemViewModel item in Model)
             {
                 <div class="cart-item">
                     <div class="row align-items-center g-3">

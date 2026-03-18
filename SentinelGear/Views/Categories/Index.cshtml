@@ -4,27 +4,60 @@
     ViewData["Title"] = "Категории";
 }
 
-<h1 class="section-title">Категории</h1>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-warning">
-        Все още няма добавени категории.
-    </div>
-}
-else
-{
-    <div class="row g-4">
-        @foreach (Category category in Model)
-        {
-            <div class="col-md-4">
-                <div class="category-card h-100">
-                    <div class="category-title">@category.Name</div>
-                    <p class="category-text">
-                        Брой продукти: @category.Products.Count
-                    </p>
-                </div>
+<section class="hero-section">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="hero-title">Категории</h1>
+            <p class="hero-subtitle mb-0">
+                Разгледайте наличните категории и открийте оборудването, което най-добре отговаря
+                на вашите нужди – от тактическа екипировка до outdoor решения.
+            </p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="icon-box ms-lg-auto">
+                <i class="bi bi-grid-fill"></i>
             </div>
-        }
+        </div>
     </div>
-}
+</section>
+
+<section>
+    <h2 class="section-title">Всички категории</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">
+            Все още няма добавени категории.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (Category category in Model)
+            {
+                <div class="col-md-4">
+                    <div class="category-card h-100 p-4 d-flex flex-column justify-content-between">
+
+                        <div>
+                            <div class="icon-box mb-3">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+
+                            <div class="category-title">@category.Name</div>
+
+                            <p class="category-text mb-3">
+                                Брой продукти: <strong>@category.Products.Count</strong>
+                            </p>
+                        </div>
+
+                        <a asp-area="" asp-controller="Products" asp-action="Index" asp-route-categoryId="@category.Id"
+                            class="btn btn-outline-tactical mt-auto">
+                            Разгледай
+                        </a>
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>

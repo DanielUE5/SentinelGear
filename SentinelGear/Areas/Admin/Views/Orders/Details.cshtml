@@ -1,0 +1,132 @@
+@model SentinelGear.Models.Order
+@using SentinelGear.Models.Enums
+@using SentinelGear.ViewModels
+
+@{
+    ViewData["Title"] = $"Поръчка #{Model.Id}";
+    OrderStatusUpdateViewModel statusModel = new OrderStatusUpdateViewModel
+    {
+        OrderId = Model.Id,
+        Status = Model.Status
+    };
+}
+
+<div class="container mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-light mb-0">Поръчка #@Model.Id</h1>
+        <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn btn-secondary">
+            Назад към поръчките
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card bg-dark text-light shadow-sm h-100">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Информация за клиента</h3>
+
+                    <p><strong>Име:</strong> @Model.FirstName @Model.LastName</p>
+                    <p><strong>Имейл:</strong> @(string.IsNullOrWhiteSpace(Model.Email) ? "Няма въведен" : Model.Email)
+                    </p>
+                    <p><strong>Телефон:</strong> @Model.PhoneNumber</p>
+                    <p><strong>Адрес:</strong> @Model.Address</p>
+                    <p><strong>Дата:</strong> @Model.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+                    <p>
+                        <strong>Текущ статус:</strong>
+                        @switch (Model.Status)
+                        {
+                            case OrderStatus.Pending:
+                                <span class="badge bg-warning text-dark">Изчаква</span>
+                                break;
+                            case OrderStatus.Processing:
+                                <span class="badge bg-info text-dark">Обработва се</span>
+                                break;
+                            case OrderStatus.Delivered:
+                                <span class="badge bg-success">Доставена</span>
+                                break;
+                            case OrderStatus.Cancelled:
+                                <span class="badge bg-danger">Отказана</span>
+                                break;
+                        }
+                    </p>
+
+                    <hr class="border-secondary" />
+
+                    <h4 class="mb-3">Промяна на статус</h4>
+
+                    <form asp-area="Admin" asp-controller="Orders" asp-action="UpdateStatus" method="post">
+                        <input asp-for="@statusModel.OrderId" name="OrderId" type="hidden" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Нов статус</label>
+                            <select name="Status" class="form-select" asp-items="ViewBag.Statuses"></select>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning">
+                            Обнови статус
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card bg-dark text-light shadow-sm h-100">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Продукти в поръчката</h3>
+
+                    @if (!Model.OrderItems.Any())
+                    {
+                        <p class="mb-0">Няма добавени продукти към тази поръчка.</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Снимка</th>
+                                        <th>Продукт</th>
+                                        <th>Количество</th>
+                                        <th>Ед. цена</th>
+                                        <th>Общо</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (OrderItem item in Model.OrderItems)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <img src="@(string.IsNullOrWhiteSpace(item.Product?.ImageUrl) ? "/images/image_not_found.jpg" : item.Product.ImageUrl)"
+                                                    alt="@item.Product?.Name"
+                                                    style="width: 70px; height: 70px; object-fit: cover; border-radius: 8px;" />
+                                            </td>
+                                            <td>@item.Product?.Name</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.UnitPrice.ToString("F2") лв.</td>
+                                            <td>@((item.UnitPrice * item.Quantity).ToString("F2")) лв.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-end">Крайна сума:</th>
+                                        <th>@Model.TotalAmount.ToString("F2") лв.</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

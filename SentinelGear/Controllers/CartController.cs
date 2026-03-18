@@ -5,9 +5,11 @@ using SentinelGear.Extensions;
 using SentinelGear.Models;
 using SentinelGear.ViewModels;
 using SentinelGear.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SentinelGear.Controllers
 {
+    [AllowAnonymous]
     public class CartController : Controller
     {
         private const string CartSessionKey = "ShoppingCart";

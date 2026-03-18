@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SentinelGear.Data;
 using SentinelGear.Models;
 using SentinelGear.ViewModels;
@@ -7,10 +7,9 @@ using System.Diagnostics;
 
 namespace SentinelGear.Controllers
 {
-    public class HomeController : BaseController
+    [AllowAnonymous]
+    public class HomeController : Controller
     {
-        // The HomeController does not currently interact with the database,
-        // but we inject the SentinelGearDbContext here for potential future use, such as displaying featured products or categories on the home page.
         private readonly SentinelGearDbContext dbContext;
 
         public HomeController(SentinelGearDbContext dbContext)
@@ -19,11 +18,6 @@ namespace SentinelGear.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> Privacy()
         {
             return View();
         }

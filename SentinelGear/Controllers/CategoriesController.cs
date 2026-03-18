@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SentinelGear.Data;
 using SentinelGear.Models;
 
 namespace SentinelGear.Controllers
 {
-    public class CategoriesController : BaseController
+    [AllowAnonymous]
+    public class CategoriesController : Controller
     {
         private readonly SentinelGearDbContext dbContext;
 

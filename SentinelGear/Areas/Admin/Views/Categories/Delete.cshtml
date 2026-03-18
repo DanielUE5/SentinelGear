@@ -1,0 +1,38 @@
+@model SentinelGear.Models.Category
+
+@{
+    ViewData["Title"] = "Изтриване на категория";
+    int activeProductsCount = Model.Products.Count(p => !p.IsDeleted);
+}
+
+<div class="container mt-4">
+    <div class="card bg-dark text-light shadow-sm p-4">
+        <h1 class="mb-4 text-danger">Изтриване на категория</h1>
+
+        <h3>@Model.Name</h3>
+        <p><strong>Активни продукти:</strong> @activeProductsCount</p>
+
+        @if (activeProductsCount > 0)
+        {
+            <div class="alert alert-danger mt-3">
+                Тази категория не може да бъде изтрита, защото има активни продукти към нея.
+            </div>
+
+            <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-secondary">
+                Назад
+            </a>
+        }
+        else
+        {
+            <div class="alert alert-warning mt-3">
+                Сигурни ли сте, че искате да изтриете тази категория?
+            </div>
+
+            <form asp-area="Admin" asp-controller="Categories" asp-action="DeleteConfirmed" asp-route-id="@Model.Id"
+                method="post">
+                <button type="submit" class="btn btn-danger">Да, изтрий</button>
+                <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-secondary">Отказ</a>
+            </form>
+        }
+    </div>
+</div>

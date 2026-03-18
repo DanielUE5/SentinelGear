@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using SentinelGear.Data;
 using SentinelGear.Models;
 using SentinelGear.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SentinelGear.Controllers
 {
-    public class ProductsController : BaseController
+    [AllowAnonymous]
+    public class ProductsController : Controller
     {
         private readonly SentinelGearDbContext dbContext;
 
@@ -26,7 +28,8 @@ namespace SentinelGear.Controllers
 
             if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
             {
-                productsQuery = productsQuery.Where(p =>
+                productsQuery = productsQuery
+                .Where(p =>
                     p.Name.Contains(filter.SearchTerm) ||
                     p.Description.Contains(filter.SearchTerm) ||
                     (p.Manufacturer != null && p.Manufacturer.Contains(filter.SearchTerm)));
@@ -80,6 +83,7 @@ namespace SentinelGear.Controllers
             List<SelectListItem> manufacturers = await dbContext.Products
                 .Where(p => p.Manufacturer != null && p.Manufacturer != "")
                 .Select(p => p.Manufacturer!)
+                .AsNoTracking()
                 .Distinct()
                 .OrderBy(m => m)
                 .Select(m => new SelectListItem

@@ -12,7 +12,7 @@ namespace SentinelGear
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+                ?? throw new InvalidOperationException("Низът за свързване 'DefaultConnection' не е намерен.");
 
             builder.Services.AddDbContext<SentinelGearDbContext>(options =>
                 options.UseSqlServer(connectionString));
@@ -54,7 +54,6 @@ namespace SentinelGear
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -64,9 +63,10 @@ namespace SentinelGear
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Area route must be registered before the default route to ensure correct routing for areas.
             app.MapControllerRoute(
                 name: "areas",
-                pattern: "{area:exists}/{controller=AdminPanel}/{action=Index}/{id?}");
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",

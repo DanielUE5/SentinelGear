@@ -1,0 +1,56 @@
+@model IEnumerable<SentinelGear.Models.Order>
+@using SentinelGear.Models.Enums
+
+@{
+    ViewData["Title"] = "Моите поръчки";
+}
+
+<div class="container mt-4">
+    <h1 class="text-light mb-4">Моите поръчки</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Все още нямате направени поръчки.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (Order order in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card bg-dark text-light h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Поръчка #@order.Id</h5>
+
+                            <p><strong>Дата:</strong> @order.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+                            <p><strong>Сума:</strong> @order.TotalAmount.ToString("F2") лв.</p>
+
+                            <p>
+                                <strong>Статус:</strong>
+                                @switch (order.Status)
+                                {
+                                    case OrderStatus.Pending:
+                                        <span class="badge bg-warning text-dark">Изчаква</span>
+                                        break;
+                                    case OrderStatus.Processing:
+                                        <span class="badge bg-info text-dark">Обработва се</span>
+                                        break;
+                                    case OrderStatus.Delivered:
+                                        <span class="badge bg-success">Доставена</span>
+                                        break;
+                                    case OrderStatus.Cancelled:
+                                        <span class="badge bg-danger">Отказана</span>
+                                        break;
+                                }
+                            </p>
+
+                            <p><strong>Продукти:</strong> @order.OrderItems.Sum(i => i.Quantity)</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

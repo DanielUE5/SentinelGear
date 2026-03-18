@@ -2,6 +2,7 @@
 {
     public static class CurrencyConverter
     {
+        // The fixed exchange rate between Bulgarian Lev (BGN) and Euro (EUR) as of the last update.
         private const decimal BgnToEurRate = 1.95583m;
 
         public static decimal ConvertBgnToEur(decimal priceInBgn)
