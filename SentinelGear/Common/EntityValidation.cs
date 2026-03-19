@@ -54,7 +54,7 @@
             public const int FirstNameMaxLength = 50;
             public const int LastNameMaxLength = 50;
             public const int EmailMaxLength = 100;
-            public const string PhoneNumberPattern = @"^(\+359|0)8[7-9]\d{2}\s?\d{3}\s?\d{3}$";
+            public const string PhoneNumberPattern = @"^(\+359|0)8[7-9]\d\s?\d{3}\s?\d{3}$";
             public const int AddressMaxLength = 100;
         }
 

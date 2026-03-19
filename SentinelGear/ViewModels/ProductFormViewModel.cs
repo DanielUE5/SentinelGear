@@ -19,7 +19,7 @@ namespace SentinelGear.ViewModels
         public string Description { get; set; } = null!;
 
         [Required(ErrorMessage = "Цената е задължителна.")]
-        [Range(typeof(decimal), "0.01", "999999.99", ErrorMessage = "Цената трябва да бъде по-голяма от 0.")]
+        [Range(0.01, 999999.99, ErrorMessage = "Цената трябва да бъде между 0.01 и 999999.99.")]
         [Display(Name = "Цена (лв.)")]
         public decimal Price { get; set; }
 
