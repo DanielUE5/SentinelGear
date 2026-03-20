@@ -16,17 +16,11 @@ namespace SentinelGear.Data
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
-        public virtual DbSet<CartItem> CartItems { get; set; } = null!;
         public virtual DbSet<ContactMessage> ContactMessages { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // Configure unique index on CartItem for UserId and ProductId to prevent duplicate entries
-            modelBuilder.Entity<CartItem>()
-               .HasIndex(ci => new { ci.UserId, ci.ProductId })
-               .IsUnique();
 
             // Configure relationships and cascade delete behaviors
             modelBuilder.Entity<Product>()
@@ -34,12 +28,6 @@ namespace SentinelGear.Data
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<CartItem>()
-                .HasOne(ci => ci.Product)
-                .WithMany(p => p.CartItems)
-                .HasForeignKey(ci => ci.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Order)
