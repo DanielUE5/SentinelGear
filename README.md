@@ -91,8 +91,7 @@ ViewModels → Presentation Layer
 - Product  
 - Category  
 - Order  
-- OrderItem  
-- CartItem  
+- OrderItem    
 - ContactMessage  
 
 Enum:
