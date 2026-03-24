@@ -114,17 +114,6 @@ await dbContext.Database.MigrateAsync();
 
 ---
 
-## 🚀 Стартиране
-
-```bash
-git clone <repo>
-cd SentinelGear
-dotnet restore
-dotnet run
-```
-
----
-
 ## ⚠️ Стартиране на друга машина
 
 ### 🔧 Промяна на Connection String
